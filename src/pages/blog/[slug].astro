@@ -1,19 +1,18 @@
 ---
-// [slug].astro — 文章详情页（动态路由）
-// [slug] 是 Astro 的动态路由参数，匹配 URL 中的路径段
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { getCollection } from "astro:content";
+import { SITE } from "../../consts";
 
-// 告诉 Astro 有哪些路径需要预渲染
+const base = SITE.base;
+
 export async function getStaticPaths() {
   const posts = await getCollection("blog");
   return posts.map((post) => ({
-    params: { slug: post.id }, // post.id 就是文件名去掉扩展名的部分
+    params: { slug: post.id },
     props: { post },
   }));
 }
 
-// 接收 getStaticPaths 传入的 post 对象
 const { post } = Astro.props;
 const { Content } = await post.render();
 ---
@@ -23,7 +22,6 @@ const { Content } = await post.render();
   description={post.data.description}
 >
   <article>
-    <!-- 文章头部信息 -->
     <header class="mb-8">
       <h1 class="text-3xl font-bold text-gray-900 mb-3">
         {post.data.title}
@@ -38,9 +36,12 @@ const { Content } = await post.render();
           post.data.tags.length > 0 && (
             <div class="flex flex-wrap gap-2">
               {post.data.tags.map((tag) => (
-                <span class="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full">
+                <a
+                  href={`${base}/tags/${encodeURIComponent(tag)}`}
+                  class="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full hover:bg-blue-100 hover:text-blue-700 transition-colors"
+                >
                   {tag}
-                </span>
+                </a>
               ))}
             </div>
           )
@@ -48,15 +49,13 @@ const { Content } = await post.render();
       </div>
     </header>
 
-    <!-- 文章正文 — 使用 .prose 类获得排版样式 -->
     <div class="prose">
       <Content />
     </div>
   </article>
 
-  <!-- 返回链接 -->
   <footer class="mt-12 pt-6 border-t border-gray-200">
-    <a href="/" class="text-sm text-blue-600 hover:text-blue-800 transition-colors">
+    <a href={base || "/"} class="text-sm text-blue-600 hover:text-blue-800 transition-colors">
       &larr; 回到首页
     </a>
   </footer>

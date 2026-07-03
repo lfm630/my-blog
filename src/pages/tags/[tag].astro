@@ -1,10 +1,11 @@
 ---
-// tags/[tag].astro — 单个标签的文章列表页
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import PostCard from "../../components/PostCard.astro";
 import { getCollection } from "astro:content";
+import { SITE } from "../../consts";
 
-// getStaticPaths 有自己独立的作用域，外部变量不会传入
+const base = SITE.base;
+
 export async function getStaticPaths() {
   const allPosts = (await getCollection("blog")).filter(
     (post) => !post.data.draft
@@ -13,10 +14,8 @@ export async function getStaticPaths() {
   return allTags.map((tag) => ({ params: { tag } }));
 }
 
-// 当前标签从 URL 参数获取
 const { tag } = Astro.params;
 
-// 筛选包含该标签的文章
 const posts = (await getCollection("blog"))
   .filter((post) => !post.data.draft && post.data.tags.includes(tag))
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
@@ -49,7 +48,7 @@ const posts = (await getCollection("blog"))
   }
 
   <footer class="mt-12 pt-6 border-t border-gray-200">
-    <a href="/tags" class="text-sm text-blue-600 hover:text-blue-800 transition-colors">
+    <a href={`${base}/tags`} class="text-sm text-blue-600 hover:text-blue-800 transition-colors">
       &larr; 查看所有标签
     </a>
   </footer>

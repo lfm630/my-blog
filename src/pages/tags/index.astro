@@ -1,13 +1,14 @@
 ---
-// tags/index.astro — 标签总览页，列出所有标签及其文章数
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { getCollection } from "astro:content";
+import { SITE } from "../../consts";
+
+const base = SITE.base;
 
 const allPosts = (await getCollection("blog")).filter(
   (post) => !post.data.draft
 );
 
-// 汇总所有标签 + 文章计数
 const tagCount = new Map<string, number>();
 for (const post of allPosts) {
   for (const tag of post.data.tags) {
@@ -35,7 +36,7 @@ const tags = [...tagCount.entries()].sort((a, b) => b[1] - a[1]);
       <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
         {tags.map(([tag, count]) => (
           <a
-            href={`/tags/${encodeURIComponent(tag)}`}
+            href={`${base}/tags/${encodeURIComponent(tag)}`}
             class="flex items-center justify-between p-4 bg-white border border-gray-200 rounded-lg hover:border-blue-300 hover:shadow-sm transition-all"
           >
             <span class="text-gray-800 font-medium">{tag}</span>
