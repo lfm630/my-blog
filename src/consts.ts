@@ -4,5 +4,5 @@ export const SITE = {
   description: "一个分享技术、阅读与生活的个人博客。by lefomo",
   // GitHub 项目仓库必须设置 base
   // 部署到 https://lfm630.github.io/my-blog/
-  base: "/my-blog",
+  base: "",
 };
