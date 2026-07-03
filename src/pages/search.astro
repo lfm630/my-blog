@@ -1,0 +1,61 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const base = "/my-blog";
+---
+
+<BaseLayout
+  title="搜索 — 我的博客"
+  description="搜索博客文章"
+>
+  <div class="max-w-3xl mx-auto">
+    <div class="mb-8">
+      <a
+        href={`${base}/`}
+        class="inline-flex items-center gap-1 text-xs font-mono transition-colors duration-300 mb-3" style="color: var(--color-text-muted);"
+      >
+        <span style="opacity: 0.6;">//</span> cd ~/home
+      </a>
+      <h1 class="text-lg font-black font-mono transition-colors duration-300" style="color: var(--color-text);">
+        <span style="color: var(--color-accent);">##</span> Search
+      </h1>
+      <p class="text-xs mt-1 font-mono transition-colors duration-300" style="color: var(--color-text-muted);">
+        <span style="color: var(--color-text-muted); opacity: 0.6;">//</span> powered by Pagefind
+      </p>
+    </div>
+
+    <div
+      class="p-6 transition-colors duration-300"
+      style="
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        clip-path: polygon(0 6px, 3px 3px, 6px 0, calc(100% - 6px) 0, calc(100% - 3px) 3px, 100% 6px, 100% calc(100% - 6px), calc(100% - 3px) calc(100% - 3px), calc(100% - 6px) 100%, 6px 100%, 3px calc(100% - 3px), 0 calc(100% - 6px));
+      "
+    >
+      <div id="pagefind-search"></div>
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  document.addEventListener("astro:page-load", initSearch);
+
+  function initSearch() {
+    const pageFindSearch = document.querySelector("#pagefind-search");
+    if (!pageFindSearch) return;
+    const params = new URLSearchParams(window.location.search);
+    const onIdle = window.requestIdleCallback || ((cb: () => void) => setTimeout(cb, 1));
+    onIdle(async () => {
+      try {
+        const { PagefindUI } = await import("@pagefind/default-ui");
+        const search = new PagefindUI({ element: "#pagefind-search", showImages: false });
+        const query = params.get("q");
+        if (query) search.triggerSearch(query);
+      } catch (error) {
+        console.error("Search init error:", error);
+        const container = document.querySelector("#pagefind-search");
+        if (container) container.innerHTML = '<p class="text-center py-8 font-mono" style="color: var(--color-text-muted);"><span style="opacity: 0.6;">//</span> search_init_failed</p>';
+      }
+    });
+  }
+</script>

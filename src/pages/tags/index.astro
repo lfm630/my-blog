@@ -22,26 +22,38 @@ const tags = [...tagCount.entries()].sort((a, b) => b[1] - a[1]);
   title="标签 — 我的博客"
   description="按标签浏览所有文章。"
 >
-  <section class="mb-8">
-    <h1 class="text-2xl font-bold text-gray-900 mb-2">标签</h1>
-    <p class="text-gray-500 text-sm">
-      {tags.length} 个标签，共 {allPosts.length} 篇文章
+  <div class="mb-10">
+    <h1 class="text-lg font-black font-mono mb-2 transition-colors duration-300" style="color: var(--color-text);">
+      <span style="color: var(--color-accent);">##</span> Tags
+    </h1>
+    <p class="text-xs font-mono transition-colors duration-300" style="color: var(--color-text-muted);">
+      <span style="color: var(--color-text-muted); opacity: 0.6;">//</span> <span style="color: var(--color-accent);">{tags.length}</span> tags · <span style="color: var(--color-accent);">{allPosts.length}</span> posts
     </p>
-  </section>
+  </div>
 
   {
     tags.length === 0 ? (
-      <p class="text-gray-400 text-center py-12">还没有标签。</p>
+      <div class="p-12 text-center text-sm font-mono" style="background: var(--color-surface); border: 1px solid var(--color-border); color: var(--color-text-muted);">
+        <span style="opacity: 0.6;">//</span> no tags found
+      </div>
     ) : (
-      <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
         {tags.map(([tag, count]) => (
           <a
-            href={`${base}/tags/${encodeURIComponent(tag)}`}
-            class="flex items-center justify-between p-4 bg-white border border-gray-200 rounded-lg hover:border-blue-300 hover:shadow-sm transition-all"
+            href={`${base}/tags/${encodeURIComponent(tag)}/`}
+            class="group flex flex-col items-center p-6 glow-hover transition-all duration-300 text-center"
+            style="
+              background: var(--color-surface);
+              border: 1px solid var(--color-border);
+              clip-path: polygon(0 6px, 3px 3px, 6px 0, calc(100% - 6px) 0, calc(100% - 3px) 3px, 100% 6px, 100% calc(100% - 6px), calc(100% - 3px) calc(100% - 3px), calc(100% - 6px) 100%, 6px 100%, 3px calc(100% - 3px), 0 calc(100% - 6px));
+            "
           >
-            <span class="text-gray-800 font-medium">{tag}</span>
-            <span class="text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">
-              {count}
+            <span style="color: var(--color-accent); font-size: 20px; margin-bottom: 8px; font-family: monospace;">#</span>
+            <span class="font-semibold font-mono transition-colors duration-300" style="color: var(--color-text);">
+              {tag}
+            </span>
+            <span class="text-xs mt-1 font-mono transition-colors duration-300" style="color: var(--color-text-muted);">
+              <span style="opacity: 0.6;">//</span> {count} post{count > 1 ? "s" : ""}
             </span>
           </a>
         ))}

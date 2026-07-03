@@ -9,5 +9,6 @@
     "strict": true,
     "skipLibCheck": true,
     "jsx": "preserve"
-  }
+  },
+  "include": ["./worker-configuration.d.ts"]
 }

@@ -1,6 +1,4 @@
 ---
-// BaseLayout.astro — 所有页面的基础骨架
-// 定义了 HTML 结构、SEO meta、全局样式引入
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import "../styles/global.css";
@@ -19,19 +17,28 @@ const { title, description } = Astro.props;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
-
-    <!-- Open Graph（社交分享卡片） -->
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
 
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
     <title>{title}</title>
+
+    <!-- 主题初始化 — 防止闪烁 -->
+    <script is:inline>
+      (function(){var t=localStorage.getItem('theme');if(t==='light'){document.documentElement.classList.add('light')}else if(!t){if(window.matchMedia('(prefers-color-scheme:light)').matches){document.documentElement.classList.add('light')}}})();
+    </script>
   </head>
-  <body class="min-h-screen flex flex-col">
+  <body class="min-h-screen flex flex-col font-sans">
     <Header />
 
-    <!-- 页面主体内容 -->
-    <main class="flex-1 max-w-2xl mx-auto px-4 py-8 w-full">
+    <main class="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
       <slot />
     </main>
 

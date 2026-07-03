@@ -1,13 +1,13 @@
 import { defineConfig } from "astro/config";
 import tailwind from "@astrojs/tailwind";
+import cloudflare from "@astrojs/cloudflare";
 
 // https://astro.build/config
-const REPO_BASE = "/my-blog";
-
 export default defineConfig({
-  site: "https://lfm630.github.io",
-  base: REPO_BASE,
+  site: "https://my-blog.pages.dev",
   trailingSlash: "always",
   output: "static",
+  adapter: cloudflare(),
+
   integrations: [tailwind()],
 });

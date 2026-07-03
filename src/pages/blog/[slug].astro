@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import Comment from "../../components/Comment.astro";
 import { getCollection } from "astro:content";
 import { SITE } from "../../consts";
 
@@ -21,13 +22,21 @@ const { Content } = await post.render();
   title={`${post.data.title} — 我的博客`}
   description={post.data.description}
 >
-  <article>
-    <header class="mb-8">
-      <h1 class="text-3xl font-bold text-gray-900 mb-3">
+  <article class="max-w-3xl mx-auto">
+    <header class="mb-10">
+      <a
+        href={base ? `${base}/` : "/"}
+        class="inline-flex items-center gap-1 text-xs font-mono transition-colors duration-300 mb-4" style="color: var(--color-text-muted);"
+      >
+        <span style="opacity: 0.6;">//</span> cd ~/home
+      </a>
+
+      <h1 class="text-2xl sm:text-3xl font-black font-mono mb-4 transition-colors duration-300" style="color: var(--color-text);">
         {post.data.title}
       </h1>
 
-      <div class="flex flex-wrap items-center gap-4 text-sm text-gray-400">
+      <div class="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs font-mono transition-colors duration-300" style="color: var(--color-text-muted);">
+        <span style="opacity: 0.6;">//</span>
         <time datetime={post.data.date.toISOString()}>
           {post.data.date.toISOString().slice(0, 10)}
         </time>
@@ -35,12 +44,19 @@ const { Content } = await post.render();
         {
           post.data.tags.length > 0 && (
             <div class="flex flex-wrap gap-2">
-              {post.data.tags.map((tag) => (
+              {post.data.tags.map((tag: string) => (
                 <a
-                  href={`${base}/tags/${encodeURIComponent(tag)}`}
-                  class="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full hover:bg-blue-100 hover:text-blue-700 transition-colors"
+                  href={`${base}/tags/${encodeURIComponent(tag)}/`}
+                  class="inline-flex items-center gap-1 font-mono px-2.5 py-1 rounded-lg transition-all duration-300"
+                  style="
+                    color: var(--color-text-muted);
+                    background: var(--color-surface-alt);
+                    border: 1px solid var(--color-border);
+                  "
+                  onmouseenter="this.style.color='var(--color-accent)';this.style.borderColor='var(--color-accent-glow)';this.style.transform='translateY(-1px)';this.style.boxShadow='0 2px 8px var(--color-accent-glow-soft)'"
+                  onmouseleave="this.style.color='var(--color-text-muted)';this.style.borderColor='var(--color-border)';this.style.transform='translateY(0)';this.style.boxShadow='none'"
                 >
-                  {tag}
+                  <span style="color: var(--color-accent);">#</span>{tag}
                 </a>
               ))}
             </div>
@@ -49,14 +65,30 @@ const { Content } = await post.render();
       </div>
     </header>
 
-    <div class="prose">
-      <Content />
+    <!-- 文章正文 -->
+    <div
+      class="p-8 transition-colors duration-300"
+      style="
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        clip-path: polygon(0 6px, 3px 3px, 6px 0, calc(100% - 6px) 0, calc(100% - 3px) 3px, 100% 6px, 100% calc(100% - 6px), calc(100% - 3px) calc(100% - 3px), calc(100% - 6px) 100%, 6px 100%, 3px calc(100% - 3px), 0 calc(100% - 6px));
+      "
+    >
+      <div class="prose max-w-none">
+        <Content />
+      </div>
     </div>
   </article>
 
-  <footer class="mt-12 pt-6 border-t border-gray-200">
-    <a href={base || "/"} class="text-sm text-blue-600 hover:text-blue-800 transition-colors">
-      &larr; 回到首页
+  <div class="max-w-3xl mx-auto mt-10">
+    <a
+      href={base ? `${base}/` : "/"}
+      class="inline-flex items-center gap-1 text-xs font-mono transition-colors duration-300" style="color: var(--color-text-muted);"
+    >
+      <span style="opacity: 0.6;">//</span> cd ~/home
     </a>
-  </footer>
+  </div>
+
+  <!-- 评论 -->
+  <Comment slug={post.id.replace(/\.md$/, '')} />
 </BaseLayout>

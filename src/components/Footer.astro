@@ -1,9 +1,19 @@
 ---
-// Footer.astro — 网站底部
+// Footer.astro — 终端风格底部
 ---
 
-<footer class="border-t border-gray-200 bg-white mt-16">
-  <div class="max-w-2xl mx-auto px-4 py-8 text-center text-sm text-gray-500">
-    <p>&copy; {new Date().getFullYear()} 我的博客 &mdash; 基于 Astro 构建</p>
+<footer class="border-t mt-auto transition-colors duration-300" style="border-color: var(--color-border);">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 text-center font-mono">
+    <p class="text-sm transition-colors duration-300" style="color: var(--color-text-muted);">
+      <span style="color: var(--color-accent);">user@my_blog</span>:<span style="color: var(--color-text-dim);">~</span>$ <span style="color: var(--color-text-muted); opacity: 0.6;">exit</span>
+    </p>
+    <p class="text-xs mt-3 transition-colors duration-300" style="color: var(--color-text-muted); opacity: 0.5;">
+      &copy; {new Date().getFullYear()} my_blog &mdash; Crafted with <span style="color: var(--color-accent);">passion</span> and <span style="color: var(--color-accent);">code</span>.
+    </p>
+    <div class="mt-2">
+      <a href="/my-blog/rss.xml" class="text-xs transition-colors duration-300" style="color: var(--color-text-muted); opacity: 0.4;" onmouseenter="this.style.color='var(--color-accent)'" onmouseleave="this.style.color='var(--color-text-muted)'">
+        <span style="opacity: 0.6;">//</span> rss_feed.xml
+      </a>
+    </div>
   </div>
 </footer>

@@ -1,64 +1,314 @@
-/* Tailwind CSS 指令 — 这三行必须在文件最顶部 */
+/* Tailwind CSS 指令 */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* ===== 全局基础样式 ===== */
+/* ============================================================
+   主题变量系统 — 暗色(默认) / 亮色(.light)
+   ============================================================ */
+
+:root {
+  /* 背景 — 暖暗色 */
+  --color-bg: #0d0b09;
+  --color-surface: #161310;
+  --color-surface-alt: #100e0c;
+  --color-header-bg: #0d0b09f0;
+  /* 边框 */
+  --color-border: #2a2520;
+  --color-border-light: #2a252066;
+  /* 文字 */
+  --color-text: #e8e0d5;
+  --color-text-dim: #c8bda8;
+  --color-text-muted: #6b6055;
+  --color-heading: #f0e8d8;
+  /* 强调色 — CRT 琥珀 */
+  --color-accent: #ffa940;
+  --color-accent-dim: #d4892e;
+  --color-accent-glow: #ffa94033;
+  --color-accent-glow-soft: #ffa94022;
+  --color-accent-glow-tiny: #ffa94011;
+  --color-accent-bg: #ffa94008;
+  /* 标签 */
+  --color-tag-bg: #1f1a14;
+  --color-tag-text: #a09888;
+  /* 代码 */
+  --color-code-bg: #1f1a14;
+  --color-code-text: #ffa940;
+  --color-pre-bg: #100e0c;
+  /* 扫描线 / 点阵 */
+  --color-dot: #ffffff06;
+  --color-scanline: rgba(0, 0, 0, 0.05);
+  /* 滚动条 */
+  --color-scrollbar-track: #0d0b09;
+  --color-scrollbar-thumb: #2a2520;
+  --color-scrollbar-thumb-hover: #3d3630;
+  /* 辉光 */
+  --color-glow: #ffa94022;
+  --color-glow-soft: #ffa94011;
+  /* header */
+  --color-header-border: #2a2520;
+  --color-header-shadow: #ffa94022;
+  /* prose */
+  --color-prose-link: #ffa940;
+  --color-prose-link-hover: #d4892e;
+  --color-prose-strong: #f0e8d8;
+  --color-prose-blockquote: #ffa94008;
+  --color-prose-blockquote-text: #b8a898;
+  --color-prose-code-bg: #1f1a14;
+  --color-prose-code-text: #ffa940;
+  --color-prose-marker: #ffa940;
+  --color-prose-border: #2a2520;
+  --color-prose-th-bg: #161310;
+}
+
+/* 亮色主题 */
+:root.light {
+  --color-bg: #faf8f5;
+  --color-surface: #ffffff;
+  --color-surface-alt: #f5f0e8;
+  --color-header-bg: #faf8f5f0;
+  --color-border: #e0d8cc;
+  --color-border-light: #e0d8cc66;
+  --color-text: #2d2218;
+  --color-text-dim: #5c4d3c;
+  --color-text-muted: #998b7a;
+  --color-heading: #2d2218;
+  --color-accent: #c7780a;
+  --color-accent-dim: #a0650a;
+  --color-accent-glow: #c7780a33;
+  --color-accent-glow-soft: #c7780a22;
+  --color-accent-glow-tiny: #c7780a11;
+  --color-accent-bg: #c7780a08;
+  --color-tag-bg: #f5efe4;
+  --color-tag-text: #6b5d4a;
+  --color-code-bg: #f5efe4;
+  --color-code-text: #c7780a;
+  --color-pre-bg: #f5f0e8;
+  --color-dot: #00000006;
+  --color-scanline: rgba(0, 0, 0, 0.02);
+  --color-scrollbar-track: #faf8f5;
+  --color-scrollbar-thumb: #e0d8cc;
+  --color-scrollbar-thumb-hover: #c8bda8;
+  --color-glow: #c7780a22;
+  --color-glow-soft: #c7780a11;
+  --color-header-border: #e0d8cc;
+  --color-header-shadow: #c7780a22;
+  --color-prose-link: #c7780a;
+  --color-prose-link-hover: #a0650a;
+  --color-prose-strong: #2d2218;
+  --color-prose-blockquote: #c7780a08;
+  --color-prose-blockquote-text: #5c4d3c;
+  --color-prose-code-bg: #f5efe4;
+  --color-prose-code-text: #c7780a;
+  --color-prose-marker: #c7780a;
+  --color-prose-border: #e0d8cc;
+  --color-prose-th-bg: #f5f0e8;
+}
+
+/* ============================================================
+   全局基础样式
+   ============================================================ */
+
 @layer base {
-  body {
-    @apply bg-white text-gray-900 antialiased;
+  html {
+    scroll-behavior: smooth;
   }
 
-  /* 文章内容排版 — 只影响 .prose 容器内的元素 */
-  .prose h1 {
-    @apply text-3xl font-bold mb-6 mt-10 text-gray-900;
+  body {
+    @apply antialiased;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    transition: background-color 0.3s ease, color 0.3s ease;
+    /* 网格背景 + 上下渐变 */
+    background-image:
+      linear-gradient(to bottom, #00000000 0%, transparent 60%, #ffffff08 100%),
+      linear-gradient(to right, var(--color-border) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--color-border) 1px, transparent 1px);
+    background-size: 100% 100%, 32px 32px, 32px 32px;
   }
+
+  /* CRT 扫描线叠加层 */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 3px,
+      var(--color-scanline) 3px,
+      var(--color-scanline) 4px
+    );
+    animation: scanline 8s linear infinite;
+  }
+
+  /* 选中文字 */
+  ::selection {
+    background: var(--color-accent-glow);
+    color: var(--color-text);
+  }
+
+  /* 滚动条 */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--color-scrollbar-track); }
+  ::-webkit-scrollbar-thumb { background: var(--color-scrollbar-thumb); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--color-scrollbar-thumb-hover); }
+
+  /* ============================================================
+     文章排版 (Prose)
+     ============================================================ */
+  .prose h1 { @apply text-3xl font-bold mb-6 mt-10; color: var(--color-heading); }
   .prose h2 {
-    @apply text-2xl font-semibold mb-4 mt-8 text-gray-900;
+    @apply text-2xl font-semibold mb-4 mt-8;
+    color: var(--color-heading);
+    border-bottom: 2px solid var(--color-prose-border);
+    padding-bottom: 0.5rem;
   }
-  .prose h3 {
-    @apply text-xl font-semibold mb-3 mt-6 text-gray-900;
-  }
-  .prose p {
-    @apply mb-4 leading-relaxed text-gray-700;
-  }
-  .prose a {
-    @apply text-blue-600 underline hover:text-blue-800;
-  }
-  .prose ul {
-    @apply list-disc pl-6 mb-4 space-y-1;
-  }
-  .prose ol {
-    @apply list-decimal pl-6 mb-4 space-y-1;
-  }
-  .prose li {
-    @apply text-gray-700 leading-relaxed;
-  }
+  .prose h3 { @apply text-xl font-semibold mb-3 mt-6; color: var(--color-heading); }
+  .prose p { @apply mb-4 leading-relaxed; color: var(--color-text-dim); }
+  .prose a { color: var(--color-prose-link); @apply underline hover:no-underline transition-colors; }
+  .prose a:hover { color: var(--color-prose-link-hover); }
+  .prose strong { color: var(--color-prose-strong); }
+  .prose ul { @apply list-disc pl-6 mb-4 space-y-1; }
+  .prose ol { @apply list-decimal pl-6 mb-4 space-y-1; }
+  .prose li { color: var(--color-text-dim); @apply leading-relaxed; }
+  .prose li::marker { color: var(--color-prose-marker); }
   .prose code {
-    @apply bg-gray-100 text-pink-600 px-1.5 py-0.5 rounded text-sm font-mono;
+    background: var(--color-prose-code-bg);
+    color: var(--color-prose-code-text);
+    @apply px-1.5 py-0.5 rounded text-sm font-mono;
+    border: 1px solid var(--color-prose-border);
   }
   .prose pre {
-    @apply bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto mb-4;
+    background: var(--color-pre-bg);
+    color: var(--color-text-dim);
+    @apply p-4 overflow-x-auto mb-4;
+    border: 1px solid var(--color-prose-border);
+    clip-path: polygon(
+      0 4px, 4px 0, calc(100% - 4px) 0, 100% 4px,
+      100% calc(100% - 4px), calc(100% - 4px) 100%,
+      4px 100%, 0 calc(100% - 4px)
+    );
   }
   .prose pre code {
-    @apply bg-transparent text-gray-100 p-0;
+    background: transparent;
+    color: var(--color-text-dim);
+    @apply p-0 border-none;
   }
   .prose blockquote {
-    @apply border-l-4 border-blue-500 pl-4 italic text-gray-600 mb-4;
+    @apply border-l-4 pl-4 italic mb-4;
+    border-color: var(--color-accent);
+    background: var(--color-prose-blockquote);
+    color: var(--color-prose-blockquote-text);
+    padding: 0.75rem 1rem;
   }
   .prose img {
-    @apply rounded-lg max-w-full;
+    @apply max-w-full;
+    image-rendering: pixelated;
+    clip-path: polygon(
+      0 4px, 4px 0, calc(100% - 4px) 0, 100% 4px,
+      100% calc(100% - 4px), calc(100% - 4px) 100%,
+      4px 100%, 0 calc(100% - 4px)
+    );
   }
-  .prose hr {
-    @apply border-gray-200 my-8;
-  }
-  .prose table {
-    @apply w-full border-collapse mb-4;
-  }
+  .prose hr { border-color: var(--color-prose-border); @apply my-8; }
+  .prose table { @apply w-full border-collapse mb-4; }
   .prose th {
-    @apply border border-gray-300 bg-gray-50 px-4 py-2 text-left font-semibold;
+    border: 1px solid var(--color-prose-border);
+    background: var(--color-prose-th-bg);
+    @apply px-4 py-2 text-left font-semibold;
+    color: var(--color-heading);
   }
   .prose td {
-    @apply border border-gray-300 px-4 py-2;
+    border: 1px solid var(--color-prose-border);
+    @apply px-4 py-2;
+    color: var(--color-text-dim);
   }
+}
+
+/* ============================================================
+   组件级样式
+   ============================================================ */
+@layer components {
+  .pixel-corners {
+    clip-path: polygon(
+      0 8px, 4px 4px, 8px 0,
+      calc(100% - 8px) 0, calc(100% - 4px) 4px, 100% 8px,
+      100% calc(100% - 8px), calc(100% - 4px) calc(100% - 4px),
+      calc(100% - 8px) 100%,
+      8px 100%, 4px calc(100% - 4px), 0 calc(100% - 8px)
+    );
+  }
+
+  .cursor-blink::after {
+    content: "_";
+    color: var(--color-accent);
+    animation: blink 1s step-end infinite;
+  }
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
+  /* 辉光悬停 */
+  .glow-hover {
+    transition: box-shadow 0.3s ease, border-color 0.3s ease;
+  }
+  .glow-hover:hover {
+    box-shadow: 0 0 12px var(--color-glow), 0 0 24px var(--color-glow-soft);
+    border-color: var(--color-accent-glow);
+  }
+
+  /* Pagefind 搜索 UI 主题变量 */
+  .pagefind-ui {
+    --pagefind-ui-primary: var(--color-accent);
+    --pagefind-ui-text: var(--color-text);
+    --pagefind-ui-background: var(--color-surface);
+    --pagefind-ui-border: var(--color-border);
+    --pagefind-ui-tag: var(--color-surface);
+    --pagefind-ui-scale: 0.9;
+  }
+}
+
+/* ============================================================
+   工具类
+   ============================================================ */
+@layer utilities {
+  .pixelated {
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+  }
+  .text-glow {
+    text-shadow: 0 0 8px var(--color-accent-glow), 0 0 16px var(--color-accent-glow-soft);
+  }
+}
+
+/* ============================================================
+   主题切换按钮
+   ============================================================ */
+.theme-toggle {
+  @apply relative inline-flex items-center cursor-pointer;
+  width: 44px;
+  height: 24px;
+}
+.theme-toggle input {
+  @apply sr-only;
+}
+.theme-toggle .track {
+  @apply absolute inset-0 rounded-full transition-colors duration-300;
+  background: var(--color-border);
+}
+.theme-toggle .thumb {
+  @apply absolute top-0.5 left-0.5 w-[20px] h-[20px] rounded-full transition-transform duration-300 flex items-center justify-center text-[10px];
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+}
+.theme-toggle input:checked ~ .track {
+  background: var(--color-accent-dim);
+}
+.theme-toggle input:checked ~ .thumb {
+  transform: translateX(20px);
+  color: var(--color-accent);
 }
