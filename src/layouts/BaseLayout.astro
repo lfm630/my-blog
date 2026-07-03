@@ -1,0 +1,40 @@
+---
+// BaseLayout.astro — 所有页面的基础骨架
+// 定义了 HTML 结构、SEO meta、全局样式引入
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+
+    <!-- Open Graph（社交分享卡片） -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+
+    <title>{title}</title>
+  </head>
+  <body class="min-h-screen flex flex-col">
+    <Header />
+
+    <!-- 页面主体内容 -->
+    <main class="flex-1 max-w-2xl mx-auto px-4 py-8 w-full">
+      <slot />
+    </main>
+
+    <Footer />
+  </body>
+</html>

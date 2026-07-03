@@ -1,0 +1,56 @@
+---
+// tags/[tag].astro — 单个标签的文章列表页
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PostCard from "../../components/PostCard.astro";
+import { getCollection } from "astro:content";
+
+// getStaticPaths 有自己独立的作用域，外部变量不会传入
+export async function getStaticPaths() {
+  const allPosts = (await getCollection("blog")).filter(
+    (post) => !post.data.draft
+  );
+  const allTags = [...new Set(allPosts.flatMap((p) => p.data.tags))];
+  return allTags.map((tag) => ({ params: { tag } }));
+}
+
+// 当前标签从 URL 参数获取
+const { tag } = Astro.params;
+
+// 筛选包含该标签的文章
+const posts = (await getCollection("blog"))
+  .filter((post) => !post.data.draft && post.data.tags.includes(tag))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+---
+
+<BaseLayout title={`标签：${tag} — 我的博客`} description={`包含标签"${tag}"的文章列表。`}>
+  <section class="mb-8">
+    <h1 class="text-2xl font-bold text-gray-900 mb-2">
+      标签：<span class="text-blue-600">{tag}</span>
+    </h1>
+    <p class="text-gray-500 text-sm">{posts.length} 篇文章</p>
+  </section>
+
+  {
+    posts.length === 0 ? (
+      <p class="text-gray-400 text-center py-12">没有找到相关文章。</p>
+    ) : (
+      <div class="space-y-8">
+        {posts.map((post) => (
+          <PostCard
+            title={post.data.title}
+            description={post.data.description}
+            date={post.data.date.toISOString().slice(0, 10)}
+            tags={post.data.tags}
+            slug={post.id}
+          />
+        ))}
+      </div>
+    )
+  }
+
+  <footer class="mt-12 pt-6 border-t border-gray-200">
+    <a href="/tags" class="text-sm text-blue-600 hover:text-blue-800 transition-colors">
+      &larr; 查看所有标签
+    </a>
+  </footer>
+</BaseLayout>

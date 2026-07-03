@@ -1,0 +1,57 @@
+---
+// PostCard.astro — 文章列表中的卡片
+// 通过 props 接收文章数据
+interface Props {
+  title: string;
+  description: string;
+  date: string;
+  tags: string[];
+  slug: string;
+}
+
+const { title, description, date, tags, slug } = Astro.props;
+---
+
+<article class="border-b border-gray-100 pb-6 last:border-b-0">
+  <!-- 日期 -->
+  <time datetime={date} class="text-sm text-gray-400">
+    {date}
+  </time>
+
+  <!-- 标题 — 点击进入文章详情 -->
+  <h2 class="mt-1 mb-2">
+    <a
+      href={`/blog/${slug}`}
+      class="text-xl font-semibold text-gray-900 hover:text-blue-600 transition-colors"
+    >
+      {title}
+    </a>
+  </h2>
+
+  <!-- 摘要 -->
+  <p class="text-gray-600 text-sm leading-relaxed mb-3">{description}</p>
+
+  <!-- 标签（可点击跳转到标签页） -->
+  {
+    tags.length > 0 && (
+      <div class="flex flex-wrap gap-2">
+        {tags.map((tag) => (
+          <a
+            href={`/tags/${encodeURIComponent(tag)}`}
+            class="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full hover:bg-blue-100 hover:text-blue-700 transition-colors"
+          >
+            {tag}
+          </a>
+        ))}
+      </div>
+    )
+  }
+
+  <!-- 阅读链接 -->
+  <a
+    href={`/blog/${slug}`}
+    class="inline-block mt-3 text-sm text-blue-600 hover:text-blue-800 transition-colors"
+  >
+    阅读全文 &rarr;
+  </a>
+</article>

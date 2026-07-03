@@ -1,0 +1,90 @@
+---
+// index.astro — 网站首页 / 文章列表
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PostCard from "../components/PostCard.astro";
+import { getCollection } from "astro:content";
+
+// 获取所有已发布的博客文章，按日期倒序排列
+const allPosts = (await getCollection("blog"))
+  .filter((post) => !post.data.draft)
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+// 汇总所有标签 + 文章计数
+const tagCount = new Map<string, number>();
+for (const post of allPosts) {
+  for (const tag of post.data.tags) {
+    tagCount.set(tag, (tagCount.get(tag) ?? 0) + 1);
+  }
+}
+// 按文章数降序排列标签
+const tags = [...tagCount.entries()].sort((a, b) => b[1] - a[1]);
+---
+
+<BaseLayout
+  title="我的博客"
+  description="一个分享技术、阅读与生活的个人博客。"
+>
+  <!-- 个人介绍区 -->
+  <section class="mb-10 pb-8 border-b border-gray-100">
+    <h1 class="text-3xl font-bold text-gray-900 mb-3">你好，我是...</h1>
+    <p class="text-gray-600 leading-relaxed mb-2">
+      这里记录我的思考、学习和生活。欢迎你来阅读和交流。
+    </p>
+    <p class="text-sm text-gray-400">
+      共 {allPosts.length} 篇文章
+    </p>
+  </section>
+
+  <!-- 标签云 — 仅在有文章时显示 -->
+  {
+    tags.length > 0 && (
+      <section class="mb-10">
+        <h2 class="text-sm font-semibold text-gray-400 uppercase tracking-wide mb-3">
+          标签
+        </h2>
+        <div class="flex flex-wrap gap-2">
+          {tags.map(([tag, count]) => (
+            <a
+              href={`/tags/${encodeURIComponent(tag)}`}
+              class="text-sm text-gray-600 bg-gray-50 border border-gray-200 px-3 py-1 rounded-full hover:bg-blue-50 hover:border-blue-200 hover:text-blue-700 transition-colors"
+            >
+              {tag}
+              <span class="ml-1 text-xs text-gray-400">{count}</span>
+            </a>
+          ))}
+        </div>
+        <a
+          href="/tags"
+          class="inline-block mt-3 text-sm text-blue-600 hover:text-blue-800 transition-colors"
+        >
+          查看所有标签 &rarr;
+        </a>
+      </section>
+    )
+  }
+
+  <!-- 文章列表 -->
+  <section>
+    <h2 class="text-sm font-semibold text-gray-400 uppercase tracking-wide mb-6">
+      最新文章
+    </h2>
+
+    {
+      allPosts.length === 0 ? (
+        <p class="text-gray-400 text-center py-12">还没有文章，敬请期待。</p>
+      ) : (
+        <div class="space-y-8">
+          {allPosts.map((post) => (
+            <PostCard
+              title={post.data.title}
+              description={post.data.description}
+              date={post.data.date.toISOString().slice(0, 10)}
+              tags={post.data.tags}
+              slug={post.id}
+            />
+          ))}
+        </div>
+      )
+    }
+  </section>
+</BaseLayout>

@@ -1,0 +1,64 @@
+/* Tailwind CSS 指令 — 这三行必须在文件最顶部 */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ===== 全局基础样式 ===== */
+@layer base {
+  body {
+    @apply bg-white text-gray-900 antialiased;
+  }
+
+  /* 文章内容排版 — 只影响 .prose 容器内的元素 */
+  .prose h1 {
+    @apply text-3xl font-bold mb-6 mt-10 text-gray-900;
+  }
+  .prose h2 {
+    @apply text-2xl font-semibold mb-4 mt-8 text-gray-900;
+  }
+  .prose h3 {
+    @apply text-xl font-semibold mb-3 mt-6 text-gray-900;
+  }
+  .prose p {
+    @apply mb-4 leading-relaxed text-gray-700;
+  }
+  .prose a {
+    @apply text-blue-600 underline hover:text-blue-800;
+  }
+  .prose ul {
+    @apply list-disc pl-6 mb-4 space-y-1;
+  }
+  .prose ol {
+    @apply list-decimal pl-6 mb-4 space-y-1;
+  }
+  .prose li {
+    @apply text-gray-700 leading-relaxed;
+  }
+  .prose code {
+    @apply bg-gray-100 text-pink-600 px-1.5 py-0.5 rounded text-sm font-mono;
+  }
+  .prose pre {
+    @apply bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto mb-4;
+  }
+  .prose pre code {
+    @apply bg-transparent text-gray-100 p-0;
+  }
+  .prose blockquote {
+    @apply border-l-4 border-blue-500 pl-4 italic text-gray-600 mb-4;
+  }
+  .prose img {
+    @apply rounded-lg max-w-full;
+  }
+  .prose hr {
+    @apply border-gray-200 my-8;
+  }
+  .prose table {
+    @apply w-full border-collapse mb-4;
+  }
+  .prose th {
+    @apply border border-gray-300 bg-gray-50 px-4 py-2 text-left font-semibold;
+  }
+  .prose td {
+    @apply border border-gray-300 px-4 py-2;
+  }
+}

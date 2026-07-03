@@ -1,0 +1,19 @@
+---
+// Header.astro — 网站顶部导航栏
+// Astro 组件脚本在服务端执行，不会输出到浏览器
+---
+
+<header class="border-b border-gray-200 bg-white sticky top-0 z-10">
+  <nav class="max-w-2xl mx-auto px-4 h-14 flex items-center justify-between">
+    <!-- 网站名称，点击回到首页 -->
+    <a href="/" class="text-lg font-semibold text-gray-900 hover:text-blue-600 transition-colors">
+      我的博客
+    </a>
+
+    <!-- 导航链接 -->
+    <div class="flex items-center gap-4 text-sm">
+      <a href="/" class="text-gray-600 hover:text-gray-900 transition-colors">首页</a>
+      <a href="/tags" class="text-gray-600 hover:text-gray-900 transition-colors">标签</a>
+    </div>
+  </nav>
+</header>
